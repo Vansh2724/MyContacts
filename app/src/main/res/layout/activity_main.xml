@@ -6,39 +6,52 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            app:cardCornerRadius="150dp"
-            app:cardElevation="4dp"
-            android:visibility="gone"
-            app:cardUseCompatPadding="true"
-            android:contentDescription="Profile Picture"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            >
+
+
+
+
+
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:cardCornerRadius="150dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true"
+        android:contentDescription="Profile Picture"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/alarm4"
             android:scaleType="centerCrop"
-        />
+            />
 
+    </com.google.android.material.card.MaterialCardView>
+                <!-- Lower Half: Contact List -->
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
-
-
-</com.google.android.material.card.MaterialCardView>
-        <Button
-            android:id="@+id/btnfirst"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf= "parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            ></Button>
+                        <ListView
+                            android:id="@+id/listViewContacts"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:divider="@android:color/darker_gray"
+                            android:dividerHeight="1dp" />
+                </ScrollView>
+        </LinearLayout>
 
 
 
