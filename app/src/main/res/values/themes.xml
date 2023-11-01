@@ -2,8 +2,15 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.MyContacts" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/backgroundColor</item>
     </style>
-
+    <color name="colorPrimary">#3498DB</color>
+    <color name="colorPrimaryDark">#1E6A9E</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="backgroundColor">#F2F2F2</color>
+    <color name="textColorPrimary">#000000</color>
     <style name="Theme.MyContacts" parent="Base.Theme.MyContacts" />
 </resources>
