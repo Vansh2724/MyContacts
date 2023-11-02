@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.appcompat.app.AlertDialog
 import android.widget.EditText
+import android.util.Log
 import com.example.mycontacts.databinding.ActivityMainBinding
 
 
@@ -18,26 +19,26 @@ class MainActivity : AppCompatActivity() {
 
     // Change contactList to a MutableList to make it mutable
     private val contactList = mutableListOf(
-        Contact("Patel Tirth", "88662 48170"),
-        Contact("Patel Smit", "97269 34451"),
-        Contact("Chiru", "96621 52694"),
-        Contact("Patel Ved", "96625 22535"),
-        Contact("Patel Vansh", "84011 38433"),
-        Contact("Patel Tirth", "88662 48170"),
-        Contact("Patel Smit", "97269 34451"),
-        Contact("Chiru", "96621 52694"),
-        Contact("Patel Ved", "96625 22535"),
-        Contact("Patel Vansh", "84011 38433"),
-        Contact("Patel Tirth", "88662 48170"),
-        Contact("Patel Smit", "97269 34451"),
-        Contact("Chiru", "96621 52694"),
-        Contact("Patel Ved", "96625 22535"),
-        Contact("Patel Vansh", "84011 38433"),
-        Contact("Patel Tirth", "88662 48170"),
-        Contact("Patel Smit", "97269 34451"),
-        Contact("Chiru", "96621 52694"),
-        Contact("Patel Ved", "96625 22535"),
-        Contact("Patel Vansh", "84011 38433")
+        Contact("Patel Tirth", "8866248170"),
+        Contact("Patel Smit", "9726934451"),
+        Contact("Chiru", "9662152694"),
+        Contact("Patel Ved", "9662522535"),
+        Contact("Patel Vansh", "8401138433"),
+        Contact("Patel Tirth", "8866248170"),
+        Contact("Patel Smit", "9726934451"),
+        Contact("Chiru", "9662152694"),
+        Contact("Patel Ved", "9662522535"),
+        Contact("Patel Vansh", "8401138433"),
+        Contact("Patel Tirth", "8866248170"),
+        Contact("Patel Smit", "9726934451"),
+        Contact("Chiru", "9662152694"),
+        Contact("Patel Ved", "9662522535"),
+        Contact("Patel Vansh", "8401138433"),
+        Contact("Patel Tirth", "8866248170"),
+        Contact("Patel Smit", "9726934451"),
+        Contact("Chiru", "9662152694"),
+        Contact("Patel Ved", "9662522535"),
+        Contact("Patel Vansh", "8401138433")
     )
 
     // Declare recyclerView as a class property
@@ -72,6 +73,17 @@ class MainActivity : AppCompatActivity() {
                     // Add the new contact to the contactList
                     contactList.add(Contact(name, number))
                     recyclerView.adapter?.notifyItemInserted(contactList.size - 1)
+                    recyclerView.scrollToPosition(contactList.size - 1)
+                    val sortedContactList = contactList.sortedBy { it.name }
+                    recyclerView = binding.contactList // Initialize recyclerView using the binding
+                    recyclerView.layoutManager = LinearLayoutManager(this)
+                    recyclerView.adapter = ContactAdapter(sortedContactList)
+
+                    Log.d("ContactApp", "Added contact: $name, $number")
+
+                    dialog.dismiss()
+                } else {
+                    Log.e("ContactApp", "Name or number is empty")
                 }
                 dialog.dismiss()
             }
