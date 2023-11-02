@@ -7,7 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/backgroundColor</item>
     </style>
-    <color name="colorPrimary">#3498DB</color>
+    <color name="colorPrimary">#0D47A1</color>
     <color name="colorPrimaryDark">#1E6A9E</color>
     <color name="colorAccent">#1E6A9E</color>
     <color name="backgroundColor">#F2F2F2</color>

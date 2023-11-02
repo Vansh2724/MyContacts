@@ -8,25 +8,81 @@ import android.widget.TextView
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.LinearLayoutManager
-
+import androidx.appcompat.app.AlertDialog
+import android.widget.EditText
+import com.example.mycontacts.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
-    val contactList = listOf(
+    private lateinit var binding: ActivityMainBinding
+
+    // Change contactList to a MutableList to make it mutable
+    private val contactList = mutableListOf(
         Contact("Patel Tirth", "88662 48170"),
         Contact("Patel Smit", "97269 34451"),
         Contact("Chiru", "96621 52694"),
         Contact("Patel Ved", "96625 22535"),
         Contact("Patel Vansh", "84011 38433"),
+        Contact("Patel Tirth", "88662 48170"),
+        Contact("Patel Smit", "97269 34451"),
+        Contact("Chiru", "96621 52694"),
+        Contact("Patel Ved", "96625 22535"),
+        Contact("Patel Vansh", "84011 38433"),
+        Contact("Patel Tirth", "88662 48170"),
+        Contact("Patel Smit", "97269 34451"),
+        Contact("Chiru", "96621 52694"),
+        Contact("Patel Ved", "96625 22535"),
+        Contact("Patel Vansh", "84011 38433"),
+        Contact("Patel Tirth", "88662 48170"),
+        Contact("Patel Smit", "97269 34451"),
+        Contact("Chiru", "96621 52694"),
+        Contact("Patel Ved", "96625 22535"),
+        Contact("Patel Vansh", "84011 38433")
     )
+
+    // Declare recyclerView as a class property
+    private lateinit var recyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.contactList)
+        val sortedContactList = contactList.sortedBy { it.name }
+        recyclerView = binding.contactList // Initialize recyclerView using the binding
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = ContactAdapter(contactList)
+        recyclerView.adapter = ContactAdapter(sortedContactList)
+
+        binding.addContactButton.setOnClickListener {
+            showAddContactDialog()
+        }
     }
+
+    private fun showAddContactDialog() {
+        val dialogView: View = LayoutInflater.from(this).inflate(R.layout.dialog_add_contact, null)
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setTitle("Add Contact")
+            .setPositiveButton("Add") { dialog, _ ->
+                val name = dialogView.findViewById<EditText>(R.id.nameEditText).text.toString()
+                val number = dialogView.findViewById<EditText>(R.id.numberEditText).text.toString()
+
+                if (name.isNotEmpty() && number.isNotEmpty()) {
+                    // Add the new contact to the contactList
+                    contactList.add(Contact(name, number))
+                    recyclerView.adapter?.notifyItemInserted(contactList.size - 1)
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+
+        alertDialog.show()
+    }
+}
 
     class ContactAdapter(private val contactList: List<Contact>) :
         RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
@@ -54,6 +110,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
-}

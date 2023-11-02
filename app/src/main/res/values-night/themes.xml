@@ -8,9 +8,9 @@
         <item name="android:windowBackground">@color/backgroundColor</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
     </style>
-    <color name="colorPrimary">#0D47A1</color> <!-- Dark blue color for night theme -->
+    <color name="colorPrimary">#3498DB</color> <!-- Dark blue color for night theme -->
     <color name="colorPrimaryDark">#002171</color>
     <color name="colorAccent">#FFFFFF</color>
-    <color name="backgroundColor">#000000</color> <!-- Black background for night theme -->
+    <color name="backgroundColor">#444444</color> <!-- Black background for night theme -->
     <color name="textColorPrimary">#FFFFFF</color> <!-- White text color for night theme -->
 </resources>
