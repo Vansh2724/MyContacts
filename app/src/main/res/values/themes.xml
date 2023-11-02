@@ -9,7 +9,7 @@
     </style>
     <color name="colorPrimary">#3498DB</color>
     <color name="colorPrimaryDark">#1E6A9E</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#1E6A9E</color>
     <color name="backgroundColor">#F2F2F2</color>
     <color name="textColorPrimary">#000000</color>
     <style name="Theme.MyContacts" parent="Base.Theme.MyContacts" />
