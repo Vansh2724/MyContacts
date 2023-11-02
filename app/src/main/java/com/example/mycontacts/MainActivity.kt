@@ -11,11 +11,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.appcompat.app.AlertDialog
 import android.widget.EditText
 import android.util.Log
+import android.content.Intent
+import android.net.Uri
+import android.content.Context
+import android.widget.ImageButton
 import com.example.mycontacts.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var recyclerView: RecyclerView
 
     // Change contactList to a MutableList to make it mutable
     private val contactList = mutableListOf(
@@ -40,10 +45,6 @@ class MainActivity : AppCompatActivity() {
         Contact("Patel Ved", "9662522535"),
         Contact("Patel Vansh", "8401138433")
     )
-
-    // Declare recyclerView as a class property
-    private lateinit var recyclerView: RecyclerView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -96,29 +97,44 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-    class ContactAdapter(private val contactList: List<Contact>) :
-        RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
 
-        class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            // Define views in the item layout
-            val nameTextView: TextView = itemView.findViewById(R.id.contactName)
-            val numberTextView: TextView = itemView.findViewById(R.id.contactNumber)
-        }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
-            val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.contact_item, parent, false)
-            return ContactViewHolder(itemView)
-        }
+class ContactAdapter(private val contactList: List<Contact>) :
+    RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
 
-        override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
-            val contact = contactList[position]
-            holder.nameTextView.text = contact.name
-            holder.numberTextView.text = contact.number
-        }
+    class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val nameTextView: TextView = itemView.findViewById(R.id.contactName)
+        val numberTextView: TextView = itemView.findViewById(R.id.contactNumber)
+        val callButton: ImageButton = itemView.findViewById(R.id.callButton)
+    }
 
-        override fun getItemCount(): Int {
-            return contactList.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.contact_item, parent, false)
+        return ContactViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
+        val contact = contactList[position]
+        holder.nameTextView.text = contact.name
+        holder.numberTextView.text = contact.number
+
+        // Set an OnClickListener for the call button
+        holder.callButton.setOnClickListener {
+            initiatePhoneCall(holder.numberTextView.text.toString(), it.context)
         }
     }
+
+    override fun getItemCount(): Int {
+        return contactList.size
+    }
+
+    private fun initiatePhoneCall(phoneNumber: String, context: Context) {
+        val dialIntent = Intent(Intent.ACTION_DIAL)
+        dialIntent.data = Uri.parse("tel:$phoneNumber")
+        context.startActivity(dialIntent)
+    }
+}
+
+
 
