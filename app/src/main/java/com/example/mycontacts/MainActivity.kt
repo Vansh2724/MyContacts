@@ -2,6 +2,14 @@ package com.example.mycontacts
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.RecyclerView
+import android.view.View
+import android.widget.TextView
+import android.view.ViewGroup
+import android.view.LayoutInflater
+import androidx.recyclerview.widget.LinearLayoutManager
+
+
 
 class MainActivity : AppCompatActivity() {
     val contactList = listOf(
@@ -13,7 +21,11 @@ class MainActivity : AppCompatActivity() {
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.contact_item)
+        setContentView(R.layout.activity_main)
+
+        val recyclerView = findViewById<RecyclerView>(R.id.contactList)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = ContactAdapter(contactList)
     }
 
     class ContactAdapter(private val contactList: List<Contact>) :
@@ -41,9 +53,7 @@ class MainActivity : AppCompatActivity() {
             return contactList.size
         }
     }
-    val recyclerView = findViewById<RecyclerView>(R.id.contactList)
-    recyclerView.layoutManager = LinearLayoutManager(this)
-    recyclerView.adapter = ContactAdapter(contactList)
+
 
 
 }
