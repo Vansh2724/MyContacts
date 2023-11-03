@@ -21,9 +21,10 @@ import com.example.mycontacts.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var recyclerView: RecyclerView
+    private lateinit var searchEditText: EditText
+    private lateinit var searchButton: ImageButton
 
-    // Change contactList to a MutableList to make it mutable
-    private val contactList = mutableListOf(
+    private val originalContactList = mutableListOf(
         Contact("Patel Tirth", "8866248170"),
         Contact("Patel Smit", "9726934451"),
         Contact("Chiru", "9662152694"),
@@ -45,40 +46,55 @@ class MainActivity : AppCompatActivity() {
         Contact("Patel Ved", "9662522535"),
         Contact("Patel Vansh", "8401138433")
     )
+
+    private val contactList = mutableListOf<Contact>()
+
+    private lateinit var contactAdapter: ContactAdapter // Define the adapter as a class-level property
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        searchEditText = binding.searchEditText
+        searchButton = binding.searchButton
+        recyclerView = binding.contactList // Initialize recyclerView using the binding
+
+        // Copy the original list to the current list
+        contactList.addAll(originalContactList)
 
         val sortedContactList = contactList.sortedBy { it.name }
-        recyclerView = binding.contactList // Initialize recyclerView using the binding
+        contactAdapter = ContactAdapter(sortedContactList) // Initialize the adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = ContactAdapter(sortedContactList)
+        recyclerView.adapter = contactAdapter // Set the adapter to the RecyclerView
 
         binding.addContactButton.setOnClickListener {
             showAddContactDialog()
         }
+        searchButton.setOnClickListener {
+            performSearch()
+        }
     }
-
     private fun showAddContactDialog() {
         val dialogView: View = LayoutInflater.from(this).inflate(R.layout.dialog_add_contact, null)
         val alertDialog = AlertDialog.Builder(this)
             .setView(dialogView)
             .setTitle("Add Contact")
             .setPositiveButton("Add") { dialog, _ ->
-                val name = dialogView.findViewById<EditText>(R.id.nameEditText).text.toString()
-                val number = dialogView.findViewById<EditText>(R.id.numberEditText).text.toString()
+                val nameEditText = dialogView.findViewById<EditText>(R.id.nameEditText)
+                val numberEditText = dialogView.findViewById<EditText>(R.id.numberEditText)
+                val name = nameEditText.text.toString()
+                val number = numberEditText.text.toString()
 
                 if (name.isNotEmpty() && number.isNotEmpty()) {
                     // Add the new contact to the contactList
-                    contactList.add(Contact(name, number))
-                    recyclerView.adapter?.notifyItemInserted(contactList.size - 1)
-                    recyclerView.scrollToPosition(contactList.size - 1)
+                    val newContact = Contact(name, number)
+                    contactList.add(newContact)
                     val sortedContactList = contactList.sortedBy { it.name }
-                    recyclerView = binding.contactList // Initialize recyclerView using the binding
+                    contactAdapter = ContactAdapter(sortedContactList)
                     recyclerView.layoutManager = LinearLayoutManager(this)
-                    recyclerView.adapter = ContactAdapter(sortedContactList)
+                    recyclerView.adapter = contactAdapter
+                    contactAdapter.notifyItemInserted(contactList.size - 1)
 
                     Log.d("ContactApp", "Added contact: $name, $number")
 
@@ -86,19 +102,32 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Log.e("ContactApp", "Name or number is empty")
                 }
-                dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
             .create()
-
         alertDialog.show()
     }
+    private fun performSearch() {
+        val query = searchEditText.text.toString().trim()
+        val filteredContacts = contactList.filter {
+            it.name.contains(query, ignoreCase = true) || it.number.contains(query)
+        }
+        recyclerView.adapter = ContactAdapter(filteredContacts)
+    }
+    override fun onBackPressed() {
+        if (searchEditText.text.toString().isNotEmpty()) {
+            searchEditText.text.clear() // Clear the search text
+            val sortedContactList = contactList.sortedBy { it.name }
+            contactAdapter = ContactAdapter(sortedContactList)
+            recyclerView.layoutManager = LinearLayoutManager(this)
+            recyclerView.adapter = contactAdapter
+        } else {
+            super.onBackPressed()
+        }
+    }
 }
-
-
-
 class ContactAdapter(private val contactList: List<Contact>) :
     RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
 
@@ -119,7 +148,6 @@ class ContactAdapter(private val contactList: List<Contact>) :
         holder.nameTextView.text = contact.name
         holder.numberTextView.text = contact.number
 
-        // Set an OnClickListener for the call button
         holder.callButton.setOnClickListener {
             initiatePhoneCall(holder.numberTextView.text.toString(), it.context)
         }
